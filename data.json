@@ -4,5 +4,11 @@
         "category": "student",
         "amount": 100.0,
         "description": "elaun"
+    },
+    {
+        "date": "2026-02-13",
+        "category": "food",
+        "amount": 100.0,
+        "description": ""
     }
 ]

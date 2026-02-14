@@ -1,127 +1,88 @@
 from storage import load_data, save_data
 from datetime import datetime
 
-def add_expense():
-    data = load_data()
+class ExpenseTracker:
+    def __init__(self):
+        # Load data dari JSON bila class dibuat
+        self.data = load_data()
 
-    category = input("Enter category: ")
-
-    try:
-        amount = float(input("Enter amount: "))
-    except ValueError:
-        print("Invalid amount. Please enter a number.")
-        return
-
-    description = input("Enter description: ")
-
-    expense = {
-        "date": datetime.now().strftime("%Y-%m-%d"),
-        "category": category,
-        "amount": amount,
-        "description": description
-    }
-
-    data.append(expense)
-    save_data(data)
-
-    print("Expense added successfully!")
-
-def view_expenses():
-    data = load_data()
-
-    if not data:
-        print("No expenses found.")
-        return
-
-    for i, expense in enumerate(data):
-        print(f"{i}. {expense['date']} | {expense['category']} | RM{expense['amount']} | {expense['description']}")
-
-def delete_expense():
-    data = load_data()
-
-    if not data:
-        print("No expenses to delete.")
-        return
-
-    view_expenses()
-
-    try:
-        index = int(input("Enter expense index to delete: "))
-    except ValueError:
-        print("Invalid input. Please enter a number.")
-        return
-
-    if 0 <= index < len(data):
-        deleted = data.pop(index)
-        save_data(data)
-        print("Deleted:", deleted)
-    else:
-        print("Invalid index.")
-
-def monthly_total():
-    data = load_data()
-
-    month = input("Enter month (YYYY-MM): ")
-    total = 0
-
-    for expense in data:
-        if expense["date"].startswith(month):
-            total += expense["amount"]
-
-    print(f"Total for {month}: RM{total}")
-
-
-def edit_expense():
-    data = load_data()
-
-    if not data:
-        print("No expenses to edit.")
-        return
-
-    view_expenses()
-
-    try:
-        index = int(input("Enter expense index to edit: "))
-    except ValueError:
-        print("Invalid input.")
-        return
-
-    if 0 <= index < len(data):
-        expense = data[index]
-
-        new_category = input(f"New category ({expense['category']}): ") or expense['category']
-
+    def add_expense(self):
+        category = input("Enter category: ")
         try:
-            new_amount_input = input(f"New amount ({expense['amount']}): ")
-            new_amount = float(new_amount_input) if new_amount_input else expense['amount']
+            amount = float(input("Enter amount: "))
         except ValueError:
-            print("Invalid amount.")
+            print("Invalid amount. Try again.")
             return
+        description = input("Enter description: ")
+        expense = {
+            "date": datetime.now().strftime("%Y-%m-%d"),
+            "category": category,
+            "amount": amount,
+            "description": description
+        }
+        self.data.append(expense)
+        save_data(self.data)
+        print("Expense added successfully!")
 
-        new_description = input(f"New description ({expense['description']}): ") or expense['description']
+    def view_expenses(self):
+        if not self.data:
+            print("No expenses found.")
+            return
+        for i, e in enumerate(self.data):
+            print(f"{i}. {e['date']} | {e['category']} | RM{e['amount']} | {e['description']}")
 
-        expense['category'] = new_category
-        expense['amount'] = new_amount
-        expense['description'] = new_description
+    def delete_expense(self):
+        if not self.data:
+            print("No expenses to delete.")
+            return
+        self.view_expenses()
+        try:
+            index = int(input("Enter index to delete: "))
+        except ValueError:
+            print("Invalid input.")
+            return
+        if 0 <= index < len(self.data):
+            deleted = self.data.pop(index)
+            save_data(self.data)
+            print("Deleted:", deleted)
+        else:
+            print("Invalid index.")
 
-        save_data(data)
-        print("Expense updated successfully!")
-    else:
-        print("Invalid index.")
+    def edit_expense(self):
+        if not self.data:
+            print("No expenses to edit.")
+            return
+        self.view_expenses()
+        try:
+            index = int(input("Enter index to edit: "))
+        except ValueError:
+            print("Invalid input.")
+            return
+        if 0 <= index < len(self.data):
+            e = self.data[index]
+            new_category = input(f"New category ({e['category']}): ") or e['category']
+            try:
+                new_amount_input = input(f"New amount ({e['amount']}): ")
+                new_amount = float(new_amount_input) if new_amount_input else e['amount']
+            except ValueError:
+                print("Invalid amount.")
+                return
+            new_description = input(f"New description ({e['description']}): ") or e['description']
+            e['category'] = new_category
+            e['amount'] = new_amount
+            e['description'] = new_description
+            save_data(self.data)
+            print("Expense updated successfully!")
+        else:
+            print("Invalid index.")
 
-def category_summary():
-    data = load_data()
-
-    if not data:
-        print("No expenses found.")
-        return
-
-    summary = {}
-
-    for expense in data:
-        category = expense["category"]
-        summary[category] = summary.get(category, 0) + expense["amount"]
-
-    print("\n=== Category Summary ===")
-    for category, total in summary.items():
-        print(f"{category}: RM{total}")
+    def category_summary(self):
+        if not self.data:
+            print("No expenses found.")
+            return
+        summary = {}
+        for e in self.data:
+            summary[e["category"]] = summary.get(e["category"], 0) + e["amount"]
+        print("\n=== Category Summary ===")
+        for cat, total in summary.items():
+            print(f"{cat}: RM{total}")
