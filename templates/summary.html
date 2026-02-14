@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+    <title>Category Summary</title>
+</head>
+<body>
+    <h1>Category Summary</h1>
+    <table border="1">
+        <tr>
+            <th>Category</th><th>Total (RM)</th>
+        </tr>
+        {% for cat, total in summary.items() %}
+        <tr>
+            <td>{{ cat }}</td>
+            <td>{{ total }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/">Back</a>
+</body>
+</html>

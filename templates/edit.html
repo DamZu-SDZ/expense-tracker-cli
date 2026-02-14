@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<head>
+    <title>Edit Expense</title>
+</head>
+<body>
+    <h1>Edit Expense</h1>
+    <form action="/edit/{{ index }}" method="post">
+        Category: <input type="text" name="category" value="{{ expense.category }}" required>
+        Amount: <input type="number" step="0.01" name="amount" value="{{ expense.amount }}" required>
+        Description: <input type="text" name="description" value="{{ expense.description }}">
+        <button type="submit">Save</button>
+    </form>
+    <a href="/">Back</a>
+</body>
+</html>

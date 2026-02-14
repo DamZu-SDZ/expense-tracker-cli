@@ -1,4 +1,6 @@
-from expense import add_expense, view_expenses, delete_expense, monthly_total, edit_expense, category_summary
+from expense import ExpenseTracker
+
+tracker = ExpenseTracker()
 
 def show_menu():
     print("\n=== STUDENT EXPENSE TRACKER ===")
@@ -6,33 +8,28 @@ def show_menu():
     print("2. View All Expenses")
     print("3. Delete Expense")
     print("4. Edit Expense")
-    print("5. Show Monthly Total")
-    print("6. Category Summary")
-    print("7. Exit")
+    print("5. Category Summary")
+    print("6. Exit")
 
 def main():
     while True:
         show_menu()
-        choice = input("Choose an option (1-5): ")
-
+        choice = input("Choose (1-6): ")
         if choice == "1":
-            add_expense()
+            tracker.add_expense()
         elif choice == "2":
-            view_expenses()
+            tracker.view_expenses()
         elif choice == "3":
-            delete_expense()
+            tracker.delete_expense()
         elif choice == "4":
-            edit_expense()
+            tracker.edit_expense()
         elif choice == "5":
-            monthly_total()
+            tracker.category_summary()
         elif choice == "6":
-            category_summary()
-        elif choice == "7":
             print("Goodbye 👋")
             break
-
         else:
-            print("Invalid choice. Try again.")
+            print("Invalid choice.")
 
 if __name__ == "__main__":
     main()
